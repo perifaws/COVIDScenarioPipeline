@@ -46,8 +46,8 @@ jobs:
         # push it to ECR so that it can
         # be deployed to ECS.
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$(git rev-parse --short=8 $IMAGE_TAG_SHA) .
-        docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG_SHA $ECR_REGISTRY/$ECR_REPOSITORY:${IMAGE_TAG_REF##*/}-v$IMAGE_TAG_RUN
-        docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG_SHA $ECR_REGISTRY/$ECR_REPOSITORY:latest
+        docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$$(git rev-parse --short=8 $IMAGE_TAG_SHA) $ECR_REGISTRY/$ECR_REPOSITORY:${IMAGE_TAG_REF##*/}-v$IMAGE_TAG_RUN
+        docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$$(git rev-parse --short=8 $IMAGE_TAG_SHA) $ECR_REGISTRY/$ECR_REPOSITORY:latest
         docker push $ECR_REGISTRY/$ECR_REPOSITORY
         echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY"
 
