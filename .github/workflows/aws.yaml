@@ -39,14 +39,11 @@ jobs:
         ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY_NAME }}
         # tag with the commit sha, ideally use git tags instead
         IMAGE_TAG_SHA: ${{ github.sha }}
-        IMAGE_TAG_REF: ${{ github.ref }}
       run: |
         # Build a docker container and
         # push it to ECR so that it can
         # be deployed to ECS.
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-        docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG  $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG_REF
-        docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG  $ECR_REGISTRY/$ECR_REPOSITORY:latest
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY"
 
