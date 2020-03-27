@@ -3,7 +3,7 @@ FROM ubuntu:18.04
 USER root
 ENV TERM dumb
 
-# set lo cale info
+# set lo cale in fo
 RUN apt-get update && apt-get install -y locales && locale-gen en_US.UTF-8
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
