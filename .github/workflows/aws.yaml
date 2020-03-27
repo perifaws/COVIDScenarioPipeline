@@ -2,7 +2,7 @@
 # The following information will need to be included in your Github secrets:
 # - AWS_ACCESS_KEY_ID: dedicated user AWS key ID
 # - AWS_SECRET_ACCESS_KEY: dedicated user AWS access key
-# - AWS_REGION: your AWS region, ex: us-east-1
+# - AWS_REGION: your AWS region, ex: us-east-1, us-west-2...
 # - ECR_REPOSITORY_NAME: name of the ECR repository, ex: myrepo
 
 on:
@@ -42,7 +42,6 @@ jobs:
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY_NAME }}
-        # tag with the commit sha, ideally use git tags instead
         IMAGE_TAG_SHA: ${{ github.sha }}
         IMAGE_TAG_RUN: ${{ github.run_number }}
         IMAGE_TAG_REF: ${{ github.ref }}
@@ -50,10 +49,11 @@ jobs:
         # Build a docker container and
         # push it to ECR so that it can
         # be deployed to ECS.
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$(git log -1 --pretty=%h) .
-        # Add tags
-        docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$(git log -1 --pretty=%h) $ECR_REGISTRY/$ECR_REPOSITORY:${IMAGE_TAG_REF##*/}-r$IMAGE_TAG_RUN
-        docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$(git log -1 --pretty=%h) $ECR_REGISTRY/$ECR_REPOSITORY:latest
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG_SHA .
+        # Add new tags
+        docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG_SHA $ECR_REGISTRY/$ECR_REPOSITORY:$(git log -1 --pretty=%h)
+        docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG_SHA $ECR_REGISTRY/$ECR_REPOSITORY:${IMAGE_TAG_REF##*/}-r$IMAGE_TAG_RUN
+        docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG_SHA $ECR_REGISTRY/$ECR_REPOSITORY:latest
         docker push $ECR_REGISTRY/$ECR_REPOSITORY
         echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY"
 
