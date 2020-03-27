@@ -1,0 +1,50 @@
+# This workflow will build and push a new container image to Amazon ECR
+# The following information will need to be included in your Github secrets:
+# - DOCKER_USERNAME: docker user name
+# - DOCKER_PASSWORD: password or access token
+# - DOCKER_REPOSITORY: your AWS region, ex: us-east-1, us-west-2...
+# - ECR_REPOSITORY_NAME: name of the ECR repository, ex: myrepo
+
+on:
+  push:
+    branches:
+      - docker-test
+    paths:
+      - 'requirements.txt'
+      - 'packages.R'
+      - 'Dockerfile'
+      - 'R/pkgs/**'
+
+name: Deploy to DockerHub
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Log into registry
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login ${{ secrets.DOCKER_REPOSITORY }} -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+
+    - name: Build, tag, and push image to DockerHub
+      id: build-image
+      env:
+        DOCKER_REPOSITORY: ${{ secrets.DOCKER_REPOSITORY }}
+        IMAGE_TAG_SHA: ${{ github.sha }}
+        IMAGE_TAG_RUN: ${{ github.run_number }}
+        IMAGE_TAG_REF: ${{ github.ref }}
+      run: |
+        # Build a docker container and
+        # push it to ECR so that it can
+        # be deployed to ECS.
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG_SHA .
+        # Add new tags
+        docker tag $DOCKER_REPOSITORY:$IMAGE_TAG_SHA $DOCKER_REPOSITORY:$(git log -1 --pretty=%h)
+        docker tag $DOCKER_REPOSITORY:$IMAGE_TAG_SHA $DOCKER_REPOSITORY:${IMAGE_TAG_REF##*/}-r$IMAGE_TAG_RUN
+        docker tag $DOCKER_REPOSITORY:$IMAGE_TAG_SHA $DOCKER_REPOSITORY:latest
+        docker push $DOCKER_REPOSITORY
+        echo "::set-output name=image::$DOCKER_REPOSITORY"
+
