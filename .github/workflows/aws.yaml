@@ -1,4 +1,9 @@
 # This workflow will build and push a new container image to Amazon ECR
+# The following information will need to be included in your Github secrets:
+# - AWS_ACCESS_KEY_ID: dedicated user AWS key ID
+# - AWS_SECRET_ACCESS_KEY: dedicated user AWS access key
+# - AWS_REGION: your AWS region, ex: us-east-1
+# - ECR_REPOSITORY_NAME: name of the ECR repository, ex: myrepo
 
 on:
   push:
@@ -26,7 +31,7 @@ jobs:
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: us-west-2
+        aws-region: ${{ secrets.AWS_REGION }}
 
     - name: Login to Amazon ECR
       id: login-ecr
