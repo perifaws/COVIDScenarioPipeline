@@ -51,6 +51,7 @@ jobs:
         # push it to ECR so that it can
         # be deployed to ECS.
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$(git log -1 --pretty=%h) .
+        # Add tags
         docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$(git log -1 --pretty=%h) $ECR_REGISTRY/$ECR_REPOSITORY:${IMAGE_TAG_REF##*/}-r$IMAGE_TAG_RUN
         docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$(git log -1 --pretty=%h) $ECR_REGISTRY/$ECR_REPOSITORY:latest
         docker push $ECR_REGISTRY/$ECR_REPOSITORY

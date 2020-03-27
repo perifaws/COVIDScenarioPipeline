@@ -54,7 +54,7 @@ RUN apt-get update && \
     libncurses-dev \
     libreadline-dev \
     supervisor \
-    # make sure we have up-to-date CA certs or curling some https  endpoints (like python.org) may fail
+    # make sure we have up-to-date CA certs or cur ling some https  endpoints (like python.org) may fail
     ca-certificates \
     # app user creation
     && useradd -m app \
