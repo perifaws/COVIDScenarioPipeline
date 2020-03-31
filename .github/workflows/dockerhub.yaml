@@ -22,7 +22,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-
+    - id: shashort
+      run: echo "::set-output name=shashort::$(git log -1 --pretty=%h)"
     - name: build-push
       uses: docker/build-push-action@v1
       env:
@@ -34,5 +35,5 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
         repository: sperif/covidscenariopipeline
         tag_with_sha: true
-        tags: $((git log -1 --pretty=%h)), ${IMAGE_TAG_REF##*/}-r$IMAGE_TAG_RUN, latest
+        tags: latest, ${{steps.shashort.outputs.shashort}}, ${IMAGE_TAG_REF##*/}-r$IMAGE_TAG_RUN
 
