@@ -1,0 +1,42 @@
+# This workflow will build and push a new container image to Amazon ECR
+# The following information will need to be included in your Github secrets:
+# - DOCKER_USERNAME: docker user name
+# - DOCKER_PASSWORD: password or access token
+# - DOCKER_REPOSITORY: your AWS region, ex: us-east-1, us-west-2...
+
+on:
+  push:
+    branches:
+      - docker-test2
+    paths:
+      - 'requirements.txt'
+      - 'packages.R'
+      - 'Dockerfile'
+      - 'R/pkgs/**'
+
+name: Deploy to DockerHub
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: build-push
+      uses: docker/build-push-action@v1
+      env:
+        DOCKER_REPOSITORY: ${{ secrets.DOCKER_REPOSITORY }}
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        IMAGE_TAG_SHA: ${{ github.sha }}
+        IMAGE_TAG_RUN: ${{ github.run_number }}
+        IMAGE_TAG_REF: ${{ github.ref }}
+
+      with:
+        username: $DOCKER_USERNAME
+        password: $DOCKER_PASSWORD
+        repository: $DOCKER_REPOSITORY
+        tag_with_sha: true
+        tags: $(git log -1 --pretty=%h), ${IMAGE_TAG_REF##*/}-r$IMAGE_TAG_RUN, latest
+
