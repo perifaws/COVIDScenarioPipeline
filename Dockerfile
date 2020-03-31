@@ -24,7 +24,7 @@ RUN set -e \
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-    # needed packages
+    # needed p ackages
     tzdata \
     sudo \
     less \
