@@ -9,7 +9,7 @@ ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
-# set n onin terac tive ins  tallation
+# set n onin te  sdrac tive ins  tallation
 ENV DEBIAN_FRONTEND noninteractive
 ENV R_VERSION 3.6.3-1bionic
 

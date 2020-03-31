@@ -28,7 +28,8 @@ jobs:
         IMAGE_TAG_REF: ${{ github.ref }}
       run: |
         echo "::set-output name=shashort::$(git log -1 --pretty=%h)"
-        echo "::set-output name=reftag::$(${IMAGE_TAG_REF##*/}-r$IMAGE+_TAG_RUN)"
+        echo "::set-output name=reftag::$(${IMAGE_TAG_REF##*/}-r$IMAGE_TAG_RUN)"
+
     - name: build-push
       uses: docker/build-push-action@v1
       with:
@@ -36,5 +37,5 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
         repository: sperif/covidscenariopipeline
         tag_with_sha: true
-        tags: latest, ${{steps.tags.outputs.shashort}}, ${{steps.tags.outputs.reftag}}
+        tags: latest,${{steps.tags.outputs.shashort}},${{steps.tags.outputs.reftag}}
 
