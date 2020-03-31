@@ -22,7 +22,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - id: tags
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Generate Tags
+      id: tags
       env:
         IMAGE_TAG_RUN: ${{ github.run_number }}
         IMAGE_TAG_REF: ${{ github.ref }}
@@ -30,7 +34,7 @@ jobs:
         echo "::set-output name=shashort::$(git log -1 --pretty=%h)"
         echo "::set-output name=reftag::$(${IMAGE_TAG_REF##*/}-r$IMAGE_TAG_RUN)"
 
-    - name: build-push
+    - name: Build-Push
       uses: docker/build-push-action@v1
       with:
         username: ${{ secrets.DOCKER_USERNAME }}

@@ -15,7 +15,7 @@ ENV R_VERSION 3.6.3-1bionic
 
 # see https://www.digitalocean.  com/community/tutorials/how-to-install-r-on-ubuntu-18-04
 # https://cran.r-project.org/bin/linux/debian/
-# https://cran.r-project.org/bin/linux/ubun tu/README.html
+# https://cran.r-pr oject.org/bin/linux/ubun tu/README.html
 RUN set -e \
       && apt-get -y install --no-install-recommends --no-install-suggests \
         gnupg2 gnupg1 ca-certificates software-properties-common \
