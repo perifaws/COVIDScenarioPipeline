@@ -13,7 +13,7 @@ ENV LC_ALL en_US.UTF-8
 ENV DEBIAN_FRONTEND noninteractive
 ENV R_VERSION 3.6.3-1bionic
 
-# see https://www.digitalocean.  com/community/tutorials/how-to-install-r-on-ubuntu-18-04
+#  see https://www.digitalocean.  com/community/tutorials/how-to-install-r-on -ubuntu-18-04
 # https://cran.r-project.org/bin/linux/debian/
 # https://cran.r-pr oject.org/bin/linux/ubun tu/README.html
 RUN set -e \
