@@ -29,11 +29,10 @@ jobs:
         IMAGE_TAG_SHA: ${{ github.sha }}
         IMAGE_TAG_RUN: ${{ github.run_number }}
         IMAGE_TAG_REF: ${{ github.ref }}
-
       with:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
         repository: sperif/covidscenariopipeline
         tag_with_sha: true
-        tags: $(git log -1 --pretty=%h), ${IMAGE_TAG_REF##*/}-r$IMAGE_TAG_RUN, latest
+        tags: $((git log -1 --pretty=%h)), ${IMAGE_TAG_REF##*/}-r$IMAGE_TAG_RUN, latest
 
