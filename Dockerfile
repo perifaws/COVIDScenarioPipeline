@@ -24,7 +24,7 @@ RUN set -e \
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-    # nee ded p ackages
+    # nee ded p acka ges
     tzdata \
     sudo \
     less \
